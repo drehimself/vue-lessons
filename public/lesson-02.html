@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Lesson 02</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="app">
+        <form action="#">
+            <span v-show="!message" class="error">
+                You must enter a message.
+            </span>
+            <br>
+             <textarea v-model="message" name="message" id="message" cols="30" rows="10"></textarea>
+            <br>
+            <button v-show="message" type="submit">
+                Send Message
+            </button>
+        </form>
+
+        <pre>
+            {{ $data | json }}
+        </pre>
+    </div>
+
+
+<!-- JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.21/vue.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            message: ''
+        }
+    });
+</script>
+
+</body>
+</html>

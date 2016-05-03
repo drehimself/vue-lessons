@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Lesson 01</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+</head>
+<body>
+
+    <div id="app">
+        <h1>{{ message }}</h1>
+
+        <input type="text" v-model="message">
+
+        <pre>
+            {{ $data | json }}
+        </pre>
+    </div>
+
+
+<!-- JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.21/vue.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello World'
+        }
+    });
+</script>
+
+</body>
+</html>
