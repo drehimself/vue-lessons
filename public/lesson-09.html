@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Lesson 09</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <style>
+        [v-cloak] {
+          display: none;
+        }
+
+        .completed {
+            text-decoration: line-through;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="app">
+        <tasks :list="tasks"></tasks>
+    </div>
+
+    <template id="tasks-template">
+        <h1>
+            My Tasks <span v-show="remaining">({{ remaining }})</span>
+        </h1>
+        <ul v-show="list.length">
+            <li v-for="task in list">
+                <span :class="{ 'completed': task.completed }"
+                      @click="task.completed = ! task.completed"
+                >
+                        {{ task.body }}
+                </span>
+
+
+                <button @click="editTask(task)">Edit</button>
+                <strong @click="deleteTask(task)">&times;</strong>
+            </li>
+        </ul>
+
+        <p v-else>No tasks yet!</p>
+
+        <button @click="clearCompleted">Clear Completed</button>
+
+        <br><br>
+
+        <form @submit.prevent="addTask" action="#">
+            <input v-model="taskToAdd" type="text" name="taskToAdd">
+            <button type="submit">Add Task</button>
+        </form>
+
+    </template>
+
+
+<!-- JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.21/vue.js"></script>
+
+<script>
+    Vue.component('tasks', {
+        template: '#tasks-template',
+        props: ['list'],
+        data: function() {
+            return {
+                taskToAdd: ''
+            };
+        },
+        computed: {
+            remaining: function() {
+                return this.list.filter(this.inProgress).length;
+            }
+        },
+        methods: {
+            isCompleted: function(task) {
+                return task.completed;
+            },
+            inProgress: function(task) {
+                return ! task.completed;
+            },
+            deleteTask: function(task) {
+                this.list.$remove(task);
+            },
+            clearCompleted: function() {
+                this.list = this.list.filter(this.inProgress);
+            },
+            addTask: function() {
+                this.list.push({ body: this.taskToAdd, completed: false });
+                this.taskToAdd = '';
+            },
+            editTask: function(task) {
+                var taskToEdit = prompt("Edit Task", task.body);
+
+                if (taskToEdit != null) {
+                    task.body = taskToEdit;
+                }
+
+            }
+        }
+    });
+    new Vue({
+        el: '#app',
+        data: {
+            tasks: [
+                { body: 'Go to the store', completed: false },
+                { body: 'Go to the bank', completed: false },
+                { body: 'Go to the doctor', completed: true }
+            ]
+        }
+    });
+</script>
+
+</body>
+</html>

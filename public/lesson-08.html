@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Lesson 08</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <style>
+        [v-cloak] {
+          display: none;
+        }
+
+        .completed {
+            text-decoration: line-through;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="app">
+
+        <tasks :list="tasks"></tasks>
+        <tasks :list="[{ body: 'Do this', completed: false }]"></tasks>
+
+    </div>
+
+    <template id="tasks-template">
+        <ul>
+            <li :class="{ 'completed': task.completed }"
+                v-for="task in list"
+                @click="task.completed = ! task.completed"
+            >
+                {{ task.body }}
+            </li>
+        </ul>
+
+    </template>
+
+
+<!-- JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.21/vue.js"></script>
+
+<script>
+    Vue.component('tasks', {
+        template: '#tasks-template',
+        props: ['list']
+    });
+    new Vue({
+        el: '#app',
+        data: {
+            tasks: [
+                { body: 'Go to the store', completed: false },
+                { body: 'Go to the bank', completed: false },
+                { body: 'Go to the doctor', completed: true }
+            ]
+
+        }
+
+    });
+</script>
+
+</body>
+</html>

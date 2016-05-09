@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Lesson 05</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <style>
+        [v-cloak] {
+          display: none;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="app">
+
+        <h1 v-cloak>Skill: {{ skill }}</h1>
+
+        <input v-model="points" type="text">
+
+        <h1 v-cloak>{{ fullName }}</h1>
+
+        <input v-model="first" type="text">
+        <input v-model="last" type="text">
+
+    </div>
+
+
+<!-- JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.21/vue.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            points: 300,
+            first: 'Andre',
+            last: 'Madarang'
+        },
+        computed: {
+            skill: function() {
+                if (this.points <= 100) {
+                    return 'Beginner';
+                }
+
+                return 'Advanced';
+            },
+
+            fullName: function() {
+                return this.first + ' ' + this.last;
+            }
+
+        }
+    });
+</script>
+
+</body>
+</html>
