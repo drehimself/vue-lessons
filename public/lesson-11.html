@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Lesson 11</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css">
+
+    <style>
+        [v-cloak] {
+          display: none;
+        }
+
+        .completed {
+            text-decoration: line-through;
+        }
+
+        li span, li strong, li button {
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="app">
+        <tasks></tasks>
+    </div>
+
+    <template id="tasks-template">
+        <h1>
+            My Tasks <span v-show="remaining">({{ remaining }})</span>
+        </h1>
+        <i v-show="loading" class="fa fa-spinner fa-spin"></i>
+        <ul v-show="list.length">
+            <li v-for="task in list">
+                <span :class="{ 'completed': task.completed }"
+                      @click="setComplete(task)"
+                >
+                        {{ task.body }}
+                </span>
+
+
+                <button @click="editTask(task)">Edit</button>
+                <strong @click="deleteTask(task)">&times;</strong>
+            </li>
+        </ul>
+
+        <p v-else>No tasks yet!</p>
+
+        <button @click="clearCompleted">Clear Completed</button>
+
+        <br><br>
+
+        <form @submit.prevent="addTask" action="#">
+            <input v-model="taskToAdd" type="text" name="taskToAdd">
+            <button type="submit">Add Task</button>
+        </form>
+
+    </template>
+
+
+<!-- JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.21/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.7.0/vue-resource.js"></script>
+
+<script>
+    Vue.component('tasks', {
+        template: '#tasks-template',
+
+        data: function() {
+            return {
+                taskToAdd: '',
+                loading: false,
+                list: [],
+                resource: this.$resource('http://tasks-for-vue.dev/api/tasks{/id}')
+            };
+        },
+        created: function() {
+            this.fetchTaskList();
+        },
+        computed: {
+            remaining: function() {
+                return this.list.filter(this.inProgress).length;
+            }
+
+        },
+        methods: {
+             completed: function() {
+                var completed = [];
+                for (i = 0; i < this.list.length; i++) {
+                    if (this.list[i].completed == 1) {
+                        completed.push(this.list[i].id);
+                    }
+                }
+                return completed;
+            },
+            fetchTaskList: function() {
+                this.loading = true;
+                this.resource.get().then(function(response) {
+                    this.list = response.data;
+                    this.loading = false;
+                }.bind(this), function(response) {
+                    alert('error yo!');
+                });
+            },
+            isCompleted: function(task) {
+                return task.completed;
+            },
+            inProgress: function(task) {
+                return ! task.completed;
+            },
+            deleteTask: function(task) {
+                this.resource.delete({id: task.id}).then(function (response) {
+                    this.list.$remove(task);
+                }, function (response) {
+                    alert('error yo!');
+                });
+            },
+            clearCompleted: function() {
+                this.$http({
+                    url: 'http://tasks-for-vue.dev/api/tasks/deleteBatch',
+                    method: 'DELETE',
+                    params: { ids: this.completed}
+                }).then(function (response) {
+                    this.list = this.list.filter(this.inProgress);
+                }, function (response) {
+                    alert('error yo!');
+                });
+
+            },
+            addTask: function() {
+                this.resource.save({body: this.taskToAdd}).then(function (response) {
+                    this.list.push({ id: response.data.id, body: this.taskToAdd, completed: false });
+                    this.taskToAdd = '';
+                }, function (response) {
+                    alert('error yo!');
+                });
+
+            },
+            editTask: function(task) {
+                var taskToEdit = prompt("Edit Task", task.body);
+
+                if (taskToEdit != null) {
+                    this.resource.update({id: task.id}, {body: taskToEdit, completed: task.completed}).then(function (response) {
+                        task.body = taskToEdit;
+                    }, function (response) {
+                        alert('error yo!');
+                    });
+                }
+            },
+            setComplete: function(task) {
+                this.resource.update({id: task.id}, {body: task.body, completed: ! task.completed }).then(function (response) {
+                    task.completed = ! task.completed
+                }, function (response) {
+                    alert('error yo!');
+                });
+            }
+        }
+    });
+    new Vue({
+        el: '#app'
+    });
+</script>
+
+</body>
+</html>
