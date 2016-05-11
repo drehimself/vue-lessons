@@ -92,14 +92,10 @@
 
         },
         methods: {
-             completed: function() {
-                var completed = [];
-                for (i = 0; i < this.list.length; i++) {
-                    if (this.list[i].completed == 1) {
-                        completed.push(this.list[i].id);
-                    }
-                }
-                return completed;
+            completed: function() {
+                return this.list.filter(this.isCompleted).map(function(obj) {
+                    return obj.id;
+                });
             },
             fetchTaskList: function() {
                 this.loading = true;
@@ -127,7 +123,7 @@
                 this.$http({
                     url: 'http://tasks-for-vue.dev/api/tasks/deleteBatch',
                     method: 'DELETE',
-                    params: { ids: this.completed}
+                    params: { ids: this.completed }
                 }).then(function (response) {
                     this.list = this.list.filter(this.inProgress);
                 }, function (response) {
