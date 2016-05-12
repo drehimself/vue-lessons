@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Lesson 12</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <style>
+        [v-cloak] {
+          display: none;
+        }
+
+        .alert {
+            position: relative;
+            background: #ddd;
+            border: 1px solid gray;
+            padding: 1em;
+        }
+
+        .alert--success {
+            background: lightgreen;
+        }
+
+        .alert--error {
+            background: pink;
+        }
+
+        .alert__close {
+            position: absolute;
+            top: 1em;
+            right: 1em;
+            cursor: pointer;
+            font-weight: bold;
+
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="app">
+
+        <alert>
+            Generic Error Message
+        </alert>
+
+
+        <alert type="success">
+            <strong>Success!</strong> Your account has been updated.
+        </alert>
+
+        <alert type="error">
+            <strong>Error!</strong> Your account has NOT been updated.
+        </alert>
+
+
+    </div>
+
+    <template id="alert-template">
+        <div :class="alertClasses" v-show="show">
+            <slot></slot>
+            <span class="alert__close" @click="show = false">&times</span>
+        </div>
+    </template>
+
+
+<!-- JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.21/vue.js"></script>
+
+<script>
+
+    Vue.component('alert' , {
+        template: '#alert-template',
+        props: ['type'],
+        data: function() {
+            return {
+                show: true
+            }
+        },
+        computed: {
+            alertClasses: function() {
+                var type = this.type;
+                return {
+                    'alert': true,
+                    'alert--success': type == 'success',
+                    'alert--error': type == 'error'
+                }
+            }
+        }
+    });
+    new Vue({
+        el: '#app'
+    });
+</script>
+
+</body>
+</html>
