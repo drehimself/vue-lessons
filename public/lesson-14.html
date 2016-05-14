@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Lesson 14</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <style>
+        [v-cloak] {
+          display: none;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="app">
+        <ul>
+            <li v-for="person in people | orderBy 'name' | limitBy 3">
+                {{ person.name }}
+            </li>
+
+            <br><br>
+
+            <li v-for="person in people | role 'admin'">
+                {{ person.name }}
+            </li>
+        </ul>
+
+    </div>
+
+
+<!-- JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.21/vue.js"></script>
+
+<script>
+    Vue.filter('role', function(value, role) {
+        return value.filter(function(item) {
+            return item.role == role;
+        });
+    });
+    new Vue({
+        el: '#app',
+        data: {
+            people: [
+                { name: 'Andre', role: 'admin'},
+                { name: 'John', role: 'student'},
+                { name: 'Fred', role: 'admin'},
+                { name: 'Will', role: 'student'}
+            ]
+
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Lesson 15</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <style>
+        [v-cloak] {
+          display: none;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="app">
+
+        <message @new-message="handleNewMessage"></message>
+
+    </div>
+
+
+<!-- JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.21/vue.js"></script>
+
+<script>
+    Vue.component('message', {
+        template: '<input v-model="message" @keyup.enter="storeMessage">',
+
+        data: function() {
+            return {
+                message: ''
+            };
+        },
+
+        methods: {
+            storeMessage: function() {
+                // console.log('Storing ' + this.message);
+
+                this.$dispatch('new-message', this.message);
+
+                this.message = '';
+            }
+        }
+    });
+    new Vue({
+        el: '#app',
+
+        data: {
+            messages: []
+        },
+
+        methods: {
+            handleNewMessage: function(message) {
+                // console.log('Parent is handling ' + message);
+                this.messages.push(message);
+            }
+        }
+
+        // events: {
+        //     'new-message': function(message) {
+        //         console.log('Parent is handling ' + message);
+        //     }
+        // }
+    });
+</script>
+
+</body>
+</html>

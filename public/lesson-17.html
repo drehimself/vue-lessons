@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Lesson 17</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.css">
+
+    <style>
+        [v-cloak] {
+          display: none;
+        }
+
+        .box {
+            background: grey;
+            height: 50px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="app">
+
+        <div class="box animated" v-show="show" transition="fade">
+            Hello World
+        </div>
+
+        <button @click="show = !show">Toggle</button>
+
+    </div>
+
+<!-- JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.21/vue.js"></script>
+
+<script>
+
+    Vue.transition('fade', {
+        enterClass: 'fadeInUp',
+        leaveClass: 'fadeOutLeft'
+    });
+    new Vue({
+        el: '#app',
+
+        data: {
+            show: true
+        },
+    });
+
+
+</script>
+
+</body>
+</html>

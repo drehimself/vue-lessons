@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Lesson 18</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.css">
+
+    <style>
+        [v-cloak] {
+          display: none;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="app">
+
+        <h1>Welcome Back, {{ shared.username }}</h1>
+        <notification>This is a notification</notification>
+
+    </div>
+
+<!-- JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.21/vue.js"></script>
+
+<script>
+
+    var store = {
+        username: 'drehimself'
+    };
+
+    new Vue({
+        el: '#app',
+
+        data: {
+            misc: 'data',
+            shared: store
+        },
+
+        // data: {
+        //     username: 'drehimself'
+        // },
+
+        components: {
+            notification: {
+                template: '<h2>{{ username }}: <slot></slot></h2>',
+                data: function() {
+
+                    return store;
+                    // return {
+                    //     username: 'drehimself'
+                    // }
+                }
+            }
+        }
+    });
+
+
+</script>
+
+</body>
+</html>
